@@ -1,0 +1,7 @@
+bibentry(bibtype = "Manual",
+         title = "GetHFData: A R Package for Downloading and Aggregating High Frequency Trading Data from Bovespa",
+         author = c(person("Marcelo", "Perlin"),
+                    person("Henrique", "Ramos")),
+         year = 2016,
+         journal = 'Available at SSRN',
+         url = "https://ssrn.com/abstract=2824058")
