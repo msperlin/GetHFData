@@ -11,16 +11,54 @@ The package GetHFData make is easy to access this dataset directly by allowing t
 * Download individual files using `ghfd_download_file` 
 * Download and process a batch of dates and assets codes with `ghfd_get_HF_data` 
 
-More details about the usage of the package can be found in my [SSRN paper](https://ssrn.com/abstract=2824058) and its [vignette](https://cran.r-project.org/web/packages/GetHFData/vignettes/ghfd-vignette.html). 
-
+In the next example we will only use a local file from the package. Given the size of the files in the ftp and the CHECK process of CRAN, it makes sense to keep this vignette compact and fast to run. More details about the usage of the package can be found in my [RBFIN paper](http://bibliotecadigital.fgv.br/ojs/index.php/rbfin/article/view/64587/65702 ). 
 
 ## Instalation
 
-You can install `GetHFData` from CRAN:
+You can install the development version from github:
+
+```
+devtools::install_github('msperlin/GetHFData')
+``` 
+    
+The stable version is availabe in CRAN:
 
 ```
 install.packages('GetHFData')
 ``` 
+
+## Usage:
+
+```
+library(GetHFData)
+
+first.time <- '11:00:00' # first time period of day (anything before is deleted)
+last.time <- '17:00:00'  # last time period of day (anything after is deleted)
+
+first.date <- '2015-11-01'
+last.date <- '2015-11-10'
+type.output <- 'agg' # 'agg' or 'raw'
+type.data <- 'trades' # 'trades' or 'orders'
+agg.diff <- '15 min' # e.g. '15 sec', '20 min', '1 hour', ..
+
+# partial matching is available
+my.assets <- c('PETR','VALE')
+type.matching <- 'partial'
+type.market  <- 'equity'
+
+df.out <- ghfd_get_HF_data(my.assets =my.assets,
+                           type.matching = type.matching,
+                           type.market = type.market,
+                           type.data = type.data,
+                           first.date = first.date,
+                           last.date = last.date,
+                           first.time = first.time,
+                           last.time = last.time,
+                           type.output = type.output,
+                           agg.diff = agg.diff)
+
+```
+
 
 
 
