@@ -27,19 +27,23 @@ The stable version is availabe in CRAN:
 install.packages('GetHFData')
 ``` 
 
-## Usage:
+## Downloading and aggregating TRADE data
+
+Package GetHDData supports batch downloads and processing of several different tickers using start and end dates. In this vignette we are not running the code given the large size of the downloaded files. You should try the next example in your own computer (just copy, paste and run the code in R).
+
+In this example we will download files from the ftp for all stocks related to Petrobras (PETR) and Vale do Rio Doce (VALE). The data will be processed, resulting in a dataframe with aggregated data.
 
 ```
 library(GetHFData)
 
-first.time <- '11:00:00' # first time period of day (anything before is deleted)
-last.time <- '17:00:00'  # last time period of day (anything after is deleted)
+first.time <- '11:00:00'
+last.time <- '17:00:00'
 
 first.date <- '2015-11-01'
 last.date <- '2015-11-10'
-type.output <- 'agg' # 'agg' or 'raw'
-type.data <- 'trades' # 'trades' or 'orders'
-agg.diff <- '15 min' # e.g. '15 sec', '20 min', '1 hour', ..
+type.output <- 'agg'
+type.data <- 'trades'
+agg.diff <- '15 min'
 
 # partial matching is available
 my.assets <- c('PETR','VALE')
@@ -59,7 +63,40 @@ df.out <- ghfd_get_HF_data(my.assets =my.assets,
 
 ```
 
+## Downloading and aggregating ORDER data
 
+Version 1.3 of `GetHFData` makes it possible to download and aggregate order data from Bovespa. The data comprises  buy and sell orders sent by market operators. Tabular data includes type of orders (buy or sell, new/update/cancel/..), date/time of submission, priority time, prices, order quantity, among many other information.
 
+**Be aware that these are very large files.** One day of buy and sell orders in the equity market is around 100 MB zipped and close to 1 GB unzipped. If you computer is not suited to store this data in its memory, **it will crash**.  
 
+Here's an example of usage that will download and aggregate order data for all option contracts related to Petrobras (PETR):
 
+```
+library(GetHFData)
+
+first.time <- '10:00:00'
+last.time <- '17:00:00'
+
+first.date <- '2015-08-18' 
+last.date <- '2015-08-18'
+
+type.output <- 'agg' # aggregates data 
+agg.diff <- '5 min' # interval for aggregation
+
+my.assets <- 'PETR' # all options related to Petrobras (partial matching)
+type.matching <- 'partial' # finds tickers from my.assets using partial matching
+type.market = 'options' # option market
+type.data <- 'orders' # order data
+
+df.out <- ghfd_get_HF_data(my.assets =my.assets, 
+                           type.data= type.data,
+                           type.matching = type.matching,
+                           type.market = type.market,
+                           first.date = first.date,
+                           last.date = last.date,
+                           first.time = first.time,
+                           last.time = last.time,
+                           type.output = type.output,
+                           agg.diff = agg.diff)
+
+```

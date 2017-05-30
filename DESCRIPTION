@@ -9,6 +9,8 @@ Depends:
     R (>= 3.3.0)
 Imports: stringr,stats,RCurl, lubridate, readr, utils, curl,dplyr
 License: GPL-2
+BugReports: https://github.com/msperlin/GetHFData/issues
+URL: https://github.com/msperlin/GetHFData/
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: knitr,

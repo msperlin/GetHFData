@@ -119,90 +119,70 @@ $(document).ready(function () {
 </div>
 
 
-<div id="download-and-aggregate-high-frequency-trading-data-from-bovespa" class="section level2">
-<h2>Download and Aggregate High Frequency Trading Data from Bovespa</h2>
-<p>Recently, Bovespa, the Brazilian financial exchange company, allowed external access to its <a href="ftp://ftp.bmf.com.br/">ftp site</a>. In this address one can find several information regarding the Brazilian financial system, including datasets with high frequency (tick by tick) trading data for three different markets: equity, options and BMF.</p>
-<p>Downloading and processing these files, however, can be exausting. The dataset is composed of zip files with the whole trading data, separated by day and market. These files are huge in size and processing or aggregating them in a usefull manner requires specific knowledge for the structure of the dataset.</p>
-<p>The package GetHFData make is easy to access this dataset directly by allowing the easy importation and aggregations of it. Based on this package the user can:</p>
+<div id="version-1.3-2017-05-29" class="section level3">
+<h3>Version 1.3 (2017-05-29)</h3>
+<p>Major update:</p>
 <ul>
-<li>Access the contents of the Bovespa ftp using function function <code>ghfd_get_ftp_contents</code></li>
-<li>Get the list of available ticker in the trading data using <code>ghfd_get_available_tickers_from_ftp</code></li>
-<li>Download individual files using <code>ghfd_download_file</code></li>
-<li>Download and process a batch of dates and assets codes with <code>ghfd_get_HF_data</code></li>
+<li>Users can now download and aggregate order files (input type.data)</li>
+<li>Fixed link to paper</li>
+<li>Now it is possible to use partial matching (e.g. use PETR for all stocks or options related to Petrobras)</li>
+<li>implement option for only downloading files (this is helpful if you are dealing with order data and will process the files in other R session or software)</li>
+<li>muted message “Using ‘,’ as decimal and ‘.’ as grouping mark. Use read_delim() for more control.”</li>
 </ul>
-<p>In the next example we will only use a local file from the package. Given the size of the files in the ftp and the CHECK process of CRAN, it makes sense to keep this vignette compact and fast to run. More details about the usage of the package can be found in my <a href="http://bibliotecadigital.fgv.br/ojs/index.php/rbfin/article/view/64587/65702">RBFIN paper</a>.</p>
 </div>
-<div id="instalation" class="section level2">
-<h2>Instalation</h2>
-<p>You can install the development version from github:</p>
-<pre><code>devtools::install_github('msperlin/GetHFData')</code></pre>
-<p>The stable version is availabe in CRAN:</p>
-<pre><code>install.packages('GetHFData')</code></pre>
+<div id="version-1.2.4-2017-01-30" class="section level3">
+<h3>Version 1.2.4 (2017-01-30)</h3>
+<p>Minor update:</p>
+<ul>
+<li>Fixed bug in msg output when length(my.assets) &gt; 2</li>
+</ul>
 </div>
-<div id="downloading-and-aggregating-trade-data" class="section level2">
-<h2>Downloading and aggregating TRADE data</h2>
-<p>Package GetHDData supports batch downloads and processing of several different tickers using start and end dates. In this vignette we are not running the code given the large size of the downloaded files. You should try the next example in your own computer (just copy, paste and run the code in R).</p>
-<p>In this example we will download files from the ftp for all stocks related to Petrobras (PETR) and Vale do Rio Doce (VALE). The data will be processed, resulting in a dataframe with aggregated data.</p>
-<pre><code>library(GetHFData)
-
-first.time &lt;- '11:00:00'
-last.time &lt;- '17:00:00'
-
-first.date &lt;- '2015-11-01'
-last.date &lt;- '2015-11-10'
-type.output &lt;- 'agg'
-type.data &lt;- 'trades'
-agg.diff &lt;- '15 min'
-
-# partial matching is available
-my.assets &lt;- c('PETR','VALE')
-type.matching &lt;- 'partial'
-type.market  &lt;- 'equity'
-
-df.out &lt;- ghfd_get_HF_data(my.assets =my.assets,
-                           type.matching = type.matching,
-                           type.market = type.market,
-                           type.data = type.data,
-                           first.date = first.date,
-                           last.date = last.date,
-                           first.time = first.time,
-                           last.time = last.time,
-                           type.output = type.output,
-                           agg.diff = agg.diff)
-</code></pre>
+<div id="version-1.2.3-2017-01-13" class="section level3">
+<h3>Version 1.2.3 (2017-01-13)</h3>
+<p>Minor update:</p>
+<ul>
+<li>Fixed bug for non existing assets in first date of download process</li>
+<li>Changed input Date for simpler format (e.g. ‘2016-01-01’ and not as.Date(‘2016-01-01’))</li>
+</ul>
 </div>
-<div id="downloading-and-aggregating-order-data" class="section level2">
-<h2>Downloading and aggregating ORDER data</h2>
-<p>Version 1.3 of <code>GetHFData</code> makes it possible to download and aggregate order data from Bovespa. The data comprises buy and sell orders sent by market operators. Tabular data includes type of orders (buy or sell, new/update/cancel/..), date/time of submission, priority time, prices, order quantity, among many other information.</p>
-<p><strong>Be aware that these are very large files.</strong> One day of buy and sell orders in the equity market is around 100 MB zipped and close to 1 GB unzipped. If you computer is not suited to store this data in its memory, <strong>it will crash</strong>.</p>
-<p>Here’s an example of usage that will download and aggregate order data for all option contracts related to Petrobras (PETR):</p>
-<pre><code>library(GetHFData)
-
-first.time &lt;- '10:00:00'
-last.time &lt;- '17:00:00'
-
-first.date &lt;- '2015-08-18' 
-last.date &lt;- '2015-08-18'
-
-type.output &lt;- 'agg' # aggregates data 
-agg.diff &lt;- '5 min' # interval for aggregation
-
-my.assets &lt;- 'PETR' # all options related to Petrobras (partial matching)
-type.matching &lt;- 'partial' # finds tickers from my.assets using partial matching
-type.market = 'options' # option market
-type.data &lt;- 'orders' # order data
-
-df.out &lt;- ghfd_get_HF_data(my.assets =my.assets, 
-                           type.data= type.data,
-                           type.matching = type.matching,
-                           type.market = type.market,
-                           first.date = first.date,
-                           last.date = last.date,
-                           first.time = first.time,
-                           last.time = last.time,
-                           type.output = type.output,
-                           agg.diff = agg.diff)
-</code></pre>
+<div id="version-1.2.2-2016-12-05" class="section level3">
+<h3>Version 1.2.2 (2016-12-05)</h3>
+<p>Minor update:</p>
+<ul>
+<li>Revised apa citation on attach</li>
+<li>Fixed some typos in vignette and added link to SSRN paper</li>
+</ul>
+</div>
+<div id="version-1.2.1-2016-11-07" class="section level3">
+<h3>Version 1.2.1 (2016-11-07)</h3>
+<p>Minor update with the following changes:</p>
+<ul>
+<li>The user can now download data from the odd lots equity market (type.market=‘equity-odds’)</li>
+<li>Added Henrique Ramos as a contributor</li>
+<li>Other minor changes</li>
+</ul>
+</div>
+<div id="version-1.2.0-2016-10-14" class="section level3">
+<h3>Version 1.2.0 (2016-10-14)</h3>
+<p>Minor update with the following changes:</p>
+<ul>
+<li>The function ghfd_get_HF_data now allows for partial matching of asset names and also the download of all assets available in ftp files</li>
+<li>Function ghfd_get_available_tickers_from_ftp also returns the type of market in data.frame</li>
+</ul>
+</div>
+<div id="version-1.1.0-2016-08-15" class="section level3">
+<h3>Version 1.1.0 (2016-08-15)</h3>
+<p>Major update from initial version with the following changes:</p>
+<ul>
+<li>The function for finding tickers in the ftp now looks for the closest date in the case that the actual date is missing from the ftp</li>
+<li>The function for finding tickers now returns a dataframe with the tickers and number of trades</li>
+<li>Added control for bad files</li>
+<li>The output for raw and agg type of output were revised</li>
+<li>The vignette is revised</li>
+</ul>
+</div>
+<div id="version-1.0.0---first-commit-2016-07-21" class="section level3">
+<h3>Version 1.0.0 - First commit (2016-07-21)</h3>
 </div>
 
 
