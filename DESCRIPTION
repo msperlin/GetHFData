@@ -1,16 +1,16 @@
 Package: GetHFData
 Title: Download and Aggregate High Frequency Trading Data from Bovespa
-Version: 1.2.4
-Date: 2017-01-30
+Version: 1.3
+Date: 2017-05-29
 Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre")),
              person("Henrique", "Ramos", email = "hpramos4@gmail.com", role = c("ctb")) )
 Description: Downloads and aggregates high frequency trading data for Brazilian instruments directly from Bovespa ftp site <ftp://ftp.bmf.com.br/MarketData/>.
 Depends:
     R (>= 3.3.0)
-Imports:stringr,stats,RCurl, lubridate, readr, utils, curl,dplyr
+Imports: stringr,stats,RCurl, lubridate, readr, utils, curl,dplyr
 License: GPL-2
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
     testthat,

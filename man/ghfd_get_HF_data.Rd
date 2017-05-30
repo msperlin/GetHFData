@@ -4,35 +4,43 @@
 \alias{ghfd_get_HF_data}
 \title{Downloads and aggregates high frequency trading data directly from the Bovespa ftp}
 \usage{
-ghfd_get_HF_data(my.assets = NULL, type.market, first.date = "2016-01-01",
+ghfd_get_HF_data(my.assets = NULL, type.matching = "exact",
+  type.market = "equity", type.data = "trades", first.date = "2016-01-01",
   last.date = "2016-01-05", first.time = "10:00:00",
   last.time = "17:00:00", type.output = "agg", agg.diff = "15 min",
-  dl.dir = "ftp files", max.dl.tries = 10, clean.files = FALSE)
+  dl.dir = "ftp files", max.dl.tries = 10, clean.files = FALSE,
+  only.dl = FALSE)
 }
 \arguments{
 \item{my.assets}{The tickers (symbols) of the derised assets to import data (e.g. c('PETR4', 'VALE5')). The function allow for partial patching (e.g. 'PETR' for all assets related to Petrobras). Default is set to NULL (download all available tickers)}
 
+\item{type.matching}{Type of matching for asset names in data ('exact' or 'partial')}
+
 \item{type.market}{The type of market to download data from ('equity', 'equity-odds','options', 'BMF' ).}
+
+\item{type.data}{The type of financial data to download and aggregate ('trades' or 'orders').}
 
 \item{first.date}{The first date of the imported data (e.g. '2016-01-01')}
 
 \item{last.date}{The last date of the imported data (e.g. '2016-01-05')}
 
-\item{first.time}{The first intraday period to import the data. All trades before this time of day are ignored. As character, e.g. '10:00:00'.}
+\item{first.time}{The first intraday period to import the data. All trades/orders before this time of day are ignored. As character, e.g. '10:00:00'.}
 
-\item{last.time}{The last intraday period to import the data. All trades after this time of day are ignored. As character, e.g. '18:00:00'.}
+\item{last.time}{The last intraday period to import the data. All trades/orders after this time of day are ignored. As character, e.g. '18:00:00'.}
 
 \item{type.output}{Defines the type of output of the data. The choice 'agg' outputs aggregated data for time intervals defined in agg.diff.
-The choice 'raw' outputs the raw, tick by tick, data from the zip files.}
+The choice 'raw' outputs the raw, tick by tick/order by order, data from the zip files.}
 
 \item{agg.diff}{The time interval used in the aggregation of data. Only used for type.output='agg'. It should contain a integer followed by a time unit ('sec' or 'secs', 'min' or 'mins', 'hour' or 'hours', 'day' or 'days').
 Example: agg.diff = '15 mins', agg.diff = '1 hour'.}
 
-\item{dl.dir}{The folder to download the zip files}
+\item{dl.dir}{The folder to download the zip files (default = 'ftp files')}
 
 \item{max.dl.tries}{Maximum attempts to download the files from ftp}
 
 \item{clean.files}{Should the files be removed after reading it? (TRUE or FALSE)}
+
+\item{only.dl}{Should the function only download the files? (TRUE or FALSE). This is usefull if you just want the file for later analysis}
 }
 \value{
 A dataframe with the financial data in the raw format (tick by tick) or aggregated
@@ -52,4 +60,3 @@ last.date <- as.Date('2015-12-29')
 df.out <- ghfd_get_HF_data(my.assets, type.market, first.date,  last.date)
 }
 }
-

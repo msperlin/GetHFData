@@ -24,18 +24,18 @@ ghfd_get_available_tickers_from_file <- function(out.file){
 
   }
 
-  suppressWarnings(
+  suppressWarnings(suppressMessages(
     my.df <- readr::read_csv2(file = out.file,
                               skip = 1,
                               progress = F,
                               col_names = F,
                               col_types = readr::cols() )
-  )
+  ))
 
   out <- sort(table(my.df$X2), decreasing = T)
 
   df.out <- data.frame(tickers = names(out),
-                       n.trades = as.numeric(out),
+                       n.obs = as.numeric(out),
                        f.name = out.file)
   return(df.out)
 

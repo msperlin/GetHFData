@@ -5,14 +5,17 @@
 \title{Function to get available tickers from ftp}
 \usage{
 ghfd_get_available_tickers_from_ftp(my.date = "2015-11-03",
-  type.market = "equity", dl.dir = "ftp files", max.dl.tries = 10)
+  type.market = "equity", type.data = "trades", dl.dir = "ftp files",
+  max.dl.tries = 10)
 }
 \arguments{
 \item{my.date}{A single date to check tickers in ftp (e.g. '2015-11-03')}
 
 \item{type.market}{The type of market to download data from ('equity', 'equity-odds','options', 'BMF' ).}
 
-\item{dl.dir}{The folder to download the zip files}
+\item{type.data}{The type of financial data to download and aggregate ('trades' or 'orders').}
+
+\item{dl.dir}{The folder to download the zip files (default = 'ftp files')}
 
 \item{max.dl.tries}{Maximum attempts to download the files from ftp}
 }
@@ -33,4 +36,3 @@ and the numeric values as the number of trades for each ticker
  print(head(df.tickers))
 }
 }
-

@@ -20,6 +20,7 @@
 #' }
 ghfd_get_available_tickers_from_ftp <- function(my.date = '2015-11-03',
                                                 type.market = 'equity',
+                                                type.data = 'trades',
                                                 dl.dir = 'ftp files',
                                                 max.dl.tries = 10){
 
@@ -61,7 +62,9 @@ ghfd_get_available_tickers_from_ftp <- function(my.date = '2015-11-03',
     my.ftp <- "ftp://ftp.bmf.com.br/marketdata/BMF/"
 
   # get contents
-  df.ftp <- ghfd_get_ftp_contents(type.market = type.market)
+  df.ftp <- ghfd_get_ftp_contents(type.market = type.market,
+                                  type.data = type.data,
+                                  max.dl.tries = max.dl.tries)
 
   idx <- which(df.ftp$dates == my.date)
 
@@ -84,19 +87,19 @@ ghfd_get_available_tickers_from_ftp <- function(my.date = '2015-11-03',
 
   ghfd_download_file(my.url, out.file, max.dl.tries)
 
-  suppressWarnings(
+  suppressWarnings(suppressMessages(
     my.df <- readr::read_csv2(file = out.file,
                               skip = 1,
                               progress = F,
                               col_names = F,
                               col_types = readr::cols() )
-  )
+  ))
 
 
   out <- sort(table(my.df$X2), decreasing = T)
 
   df.out <- data.frame(tickers = names(out),
-                       n.trades = as.numeric(out),
+                       n.obs = as.numeric(out),
                        type.market = type.market,
                        f.name = out.file)
   return(df.out)

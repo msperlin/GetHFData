@@ -1,0 +1,118 @@
+---
+title: "Downloading and aggregating trade data from Bovespa"
+author: "Marcelo Perlin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Downloading and aggregating trade data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Recently, Bovespa, the Brazilian financial exchange company, allowed external access to its [ftp site](ftp://ftp.bmf.com.br/). In this address one can find several information regarding the Brazilian financial system, including datasets with high frequency (tick by tick) trading data for three different markets: equity, options and BMF.
+
+Downloading and processing these files, however, can be exausting. The dataset is composed of zip files with the whole trading data, separated by day and market. These files are huge in size and processing or aggregating them in a usefull manner requires specific knowledge for the structure of the dataset. 
+
+The package GetHFData make is easy to access this dataset directly by allowing the easy importation and aggregations of it. Based on this package the user can:
+
+* Access the contents of the Bovespa ftp using function function `ghfd_get_ftp_contents`
+* Get the list of available ticker in the trading data using `ghfd_get_available_tickers_from_ftp`
+* Download individual files using `ghfd_download_file` 
+* Download and process a batch of dates and assets codes with `ghfd_get_HF_data` 
+
+In the next example we will only use a local file from the package. Given the size of the files in the ftp and the CHECK process of CRAN, it makes sense to keep this vignette compact and fast to run. More details about the usage of the package can be found in my [RBFIN paper](http://bibliotecadigital.fgv.br/ojs/index.php/rbfin/article/view/64587/65702 ). 
+
+
+## Reading trading data from local file (1 date)
+
+Let's assume you need to analize high frequency trading data for option contracts in a given date  (2015-11-26). This file could be downloaded from the ftp using function `ghfd_download_file`, but it is already available locally within the package.
+
+The first step is to check the available tickers in the zip file:
+
+```{r example1}
+library(GetHFData)
+
+out.file <- system.file("extdata", 'NEG_OPCOES_20151126.zip', package = "GetHFData")
+df.tickers <- ghfd_get_available_tickers_from_file(out.file)
+print(head(df.tickers)) # show only 10
+```
+
+In `df.tickers` one can find the symbols available in the file and also the number of trades for each. Now, lets take the 3 most traded instruments in that day and check the result of the import process:
+
+```{r example2}
+
+my.assets <- df.tickers$tickers[1:3] # ticker to find in zip file
+
+type.matching <- 'exact' # defines how to match assets in dataset
+start.time <- '10:00:00' # defines first time period of day
+last.time <- '17:00:00'  # defines last time period of day
+
+my.df <- ghfd_read_file(out.file, 
+                        type.matching = type.matching,
+                        my.assets = my.assets,
+                        first.time = '10:00:00',
+                        last.time = '17:00:00',
+                        type.output = 'raw',
+                        agg.diff = '15 min')
+
+```
+
+Let's see the first part of the imported dataframe.
+
+```{r}
+head(my.df)
+```
+
+The columns names are self explanatory:
+
+```{r}
+names(my.df)
+```
+
+Now lets plot the prices of all instruments:
+
+```{r plot.prices, fig.width=7, fig.height=2.5}
+library(ggplot2)
+ 
+p <- ggplot(my.df, aes(x = TradeDateTime, y = TradePrice, color = InstrumentSymbol))
+p <-  p + geom_line()
+print(p)
+```
+
+As we can see, this was a fairly stable day for the price of these option contracts.
+
+## Downloading and reading trading data for several dates
+
+In the last example we only used one date. The package GetHDData also supports batch downloads and processing of several different tickers using start and end dates. In this vignette we are not running the code given the large size of the downloaded files. You should try the next example in your own computer (just copy, paste and run the code in R).
+
+In this example we will download files from the ftp for all stocks related to Petrobras (PETR) and Vale do Rio Doce (VALE). The data will be processed, resulting in a dataframe with aggregated data.
+
+```{r notrun, eval=FALSE}
+library(GetHFData)
+
+first.time <- '11:00:00'
+last.time <- '17:00:00'
+
+first.date <- '2015-11-01'
+last.date <- '2015-11-10'
+type.output <- 'agg'
+type.data <- 'trades'
+agg.diff <- '15 min'
+
+# partial matching is available
+my.assets <- c('PETR','VALE')
+type.matching <- 'partial'
+type.market  <- 'equity'
+
+df.out <- ghfd_get_HF_data(my.assets =my.assets,
+                           type.matching = type.matching,
+                           type.market = type.market,
+                           type.data = type.data,
+                           first.date = first.date,
+                           last.date = last.date,
+                           first.time = first.time,
+                           last.time = last.time,
+                           type.output = type.output,
+                           agg.diff = agg.diff)
+
+```

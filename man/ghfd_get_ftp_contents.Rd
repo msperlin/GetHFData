@@ -4,12 +4,15 @@
 \alias{ghfd_get_ftp_contents}
 \title{Gets the contents of Bovespa ftp}
 \usage{
-ghfd_get_ftp_contents(type.market = "equity", max.dl.tries = 10)
+ghfd_get_ftp_contents(type.market = "equity", max.dl.tries = 10,
+  type.data = "trades")
 }
 \arguments{
 \item{type.market}{The type of market to download data from ('equity', 'equity-odds','options', 'BMF' ).}
 
 \item{max.dl.tries}{Maximum attempts to download the files from ftp}
+
+\item{type.data}{The type of financial data to download and aggregate ('trades' or 'orders').}
 }
 \value{
 A list with all files from the ftp that are related to executed trades
@@ -24,4 +27,3 @@ ftp.files <- ghfd_get_ftp_contents(type.market = 'equity')
 print(ftp.files)
 }
 }
-

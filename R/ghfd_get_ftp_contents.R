@@ -14,15 +14,23 @@
 #' print(ftp.files)
 #' }
 ghfd_get_ftp_contents <- function(type.market = 'equity',
-                                  max.dl.tries = 10){
+                                  max.dl.tries = 10,
+                                  type.data = 'trades'){
 
   # check type.market
   possible.names <- c('equity','equity-odds','options','BMF')
-
   idx <- type.market %in% possible.names
 
   if (!any(idx)){
     stop(paste(c('Input type.market not valid. It should be one of the following: ', possible.names), collapse = ', '))
+  }
+
+  # check type.data
+  possible.names <- c('trades','orders')
+  idx <- type.data %in% possible.names
+
+  if (!any(idx)){
+    stop(paste(c('Input type.data not valid. It should be one of the following: ', possible.names), collapse = ', '))
   }
 
   # test for internet
@@ -43,7 +51,8 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
 
   i.try <- 1
   while (TRUE){
-    cat(paste('\nReading ftp contents for ',type.market, ' (attempt = ', i.try,'|',max.dl.tries,')',sep = ''))
+    cat(paste('\nReading ftp contents for ',type.market, '(',type.data,')',
+              ' (attempt = ', i.try,'|',max.dl.tries,')',sep = ''))
     files.at.ftp <- NULL
     try({
       files.at.ftp <- RCurl::getURL(my.ftp,
@@ -52,8 +61,15 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
                                     dirlistonly = TRUE)
     })
 
+    if (type.data =='trades'){
+      # filter ftp files for trades
+      pattern.files <- 'NEG_(.*?).zip'
+    } else if (type.data == 'orders') {
+      pattern.files <- 'OFER_(.*?).zip'
+    }
 
-    files.at.ftp <- stringr::str_extract_all(files.at.ftp,pattern = 'NEG_(.*?).zip')[[1]]
+    files.at.ftp <- stringr::str_extract_all(files.at.ftp,
+                                             pattern = pattern.files )[[1]]
 
     # remove or not FRAC market files
     idx <- stringr::str_detect(files.at.ftp, pattern = stringr::fixed('FRAC'))
@@ -76,9 +92,9 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
     }
 
     # remove larger zip files with several txt files (only a couple of months)
-    idx <- sapply(files.at.ftp, FUN = function(x) return(stringr::str_count(x,pattern = '_')))<3
-
-    files.at.ftp <- files.at.ftp[idx]
+    # DEPRECATED: THESE FILES WITH LARGE NAMES ARE NO LONGER IN THE FTP
+    #idx <- sapply(files.at.ftp, FUN = function(x) return(stringr::str_count(x,pattern = '_')))<3
+    #files.at.ftp <- files.at.ftp[idx]
 
     # check if html.code and size makes sense. If not, download it again
 
@@ -97,8 +113,6 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
     Sys.sleep(1)
   }
 
-
-
   # find dates from file names
 
   ftp.dates <- unlist(stringr::str_extract_all(files.at.ftp,
@@ -106,8 +120,17 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
                                                                 collapse = '')))
   ftp.dates <- as.Date(ftp.dates,format = '%Y%m%d')
 
-  return(data.frame(files = as.character(files.at.ftp),
-                    dates = ftp.dates,
-                    link = as.character(paste0(my.ftp,as.character(files.at.ftp) ))))
+
+
+  df.ftp <- data.frame(files = as.character(files.at.ftp),
+                       dates = ftp.dates,
+                       link = as.character(paste0(my.ftp,as.character(files.at.ftp))))
+
+  if (type.data == 'orders') {
+    df.ftp$type.order <- ifelse(stringr::str_detect(files.at.ftp,
+                                                    stringr::fixed('VDA')), 'Sell','Buy')
+  }
+
+  return(df.ftp)
 
 }

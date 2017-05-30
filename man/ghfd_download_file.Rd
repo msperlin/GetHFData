@@ -11,7 +11,7 @@ ghfd_download_file(my.ftp, out.file, dl.dir = "Dl Files", max.dl.tries = 10)
 
 \item{out.file}{Name of downloaded file with HFT data from Bovespa}
 
-\item{dl.dir}{The folder to download the zip files}
+\item{dl.dir}{The folder to download the zip files (default = 'ftp files')}
 
 \item{max.dl.tries}{Maximum attempts to download the files from ftp}
 }
@@ -27,12 +27,7 @@ and it will download the corresponding file. Returns TRUE if it worked and FALSE
 my.ftp <- 'ftp://ftp.bmf.com.br/MarketData/Bovespa-Opcoes/NEG_OPCOES_20151229.zip'
 out.file <- 'temp.zip'
 
+\dontrun{
 ghfd_download_file(my.ftp = my.ftp, out.file=out.file)
-
-## check if exists
-file.exists(out.file)
-
-## clean up example
-file.remove(out.file)
 }
-
+}

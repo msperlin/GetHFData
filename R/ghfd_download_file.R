@@ -15,13 +15,9 @@
 #' my.ftp <- 'ftp://ftp.bmf.com.br/MarketData/Bovespa-Opcoes/NEG_OPCOES_20151229.zip'
 #' out.file <- 'temp.zip'
 #'
+#' \dontrun{
 #' ghfd_download_file(my.ftp = my.ftp, out.file=out.file)
-#'
-#' ## check if exists
-#' file.exists(out.file)
-#'
-#' ## clean up example
-#' file.remove(out.file)
+#' }
 ghfd_download_file <- function(my.ftp,
                                out.file,
                                dl.dir = 'Dl Files',

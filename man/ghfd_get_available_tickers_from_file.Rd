@@ -26,4 +26,3 @@ df.tickers <- ghfd_get_available_tickers_from_file(out.file)
 
 print(head(df.tickers))
 }
-
