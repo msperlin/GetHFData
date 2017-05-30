@@ -6,7 +6,7 @@ Major update:
 * Fixed link to paper
 * Now it is possible to use partial matching (e.g. use PETR for all stocks or options related to Petrobras)
 * implement option for only downloading files (this is helpful if you are dealing with order data and will process the files in other R session or software)
-* muted message "Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control."
+* muted message "Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control." 
 
 ### Version 1.2.4 (2017-01-30)
 
