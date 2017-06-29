@@ -6,10 +6,9 @@
 \usage{
 ghfd_get_HF_data(my.assets = NULL, type.matching = "exact",
   type.market = "equity", type.data = "trades", first.date = "2016-01-01",
-  last.date = "2016-01-05", first.time = "10:00:00",
-  last.time = "17:00:00", type.output = "agg", agg.diff = "15 min",
-  dl.dir = "ftp files", max.dl.tries = 10, clean.files = FALSE,
-  only.dl = FALSE)
+  last.date = "2016-01-05", first.time = NULL, last.time = NULL,
+  type.output = "agg", agg.diff = "15 min", dl.dir = "ftp files",
+  max.dl.tries = 10, clean.files = FALSE, only.dl = FALSE)
 }
 \arguments{
 \item{my.assets}{The tickers (symbols) of the derised assets to import data (e.g. c('PETR4', 'VALE5')). The function allow for partial patching (e.g. 'PETR' for all assets related to Petrobras). Default is set to NULL (download all available tickers)}

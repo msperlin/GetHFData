@@ -25,6 +25,7 @@ ghfd_read_file <- function(out.file,
                            agg.diff = '15 min'){
 
   # check my.assets
+
   if (!is.null(my.assets)){
     my.assets <- as.character(my.assets)
 
@@ -56,8 +57,9 @@ ghfd_read_file <- function(out.file,
   }
 
 
-
-  cat(paste('\n   -> Aggregation resulted in dataframe with',nrow(t.out), 'rows'))
+  if (type.output == 'agg'){
+    cat(paste('\n   -> Aggregation resulted in dataframe with',nrow(t.out), 'rows'))
+  }
 
   return(t.out)
 }
@@ -73,13 +75,15 @@ ghfd_read_file <- function(out.file,
 #' # no example
 ghfd_read_file.trades <- function(out.file,
                                   my.assets = NULL,
-                                  type.matching,
+                                  type.matching = NULL,
                                   first.time = '10:00:00',
                                   last.time = '17:00:00',
                                   type.output = 'agg',
                                   agg.diff = '15 min') {
 
-  # import data
+  if (is.null(type.matching)) type.matching <- 'exact'
+
+    # import data
   col.names <- c('SessionDate','InstrumentSymbol','TradeNumber', 'TradePrice', 'TradedQuantity','Tradetime',
                  'TradeIndicator', 'BuyOrderDate', 'SequentialBuyOrderNumber','SecondaryOrderID',
                  'AggressorBuyOrderIndicator','SellOrderDate','SequentialSellOrderNumber','SecondaryOrderID2',
@@ -195,14 +199,19 @@ ghfd_read_file.trades <- function(out.file,
 
   unique.dates <- unique(my.df$SessionDate)
 
-  first.time <-
-    as.POSIXct(paste0(unique.dates[1], ' ', first.time, ' BRT'))
-  last.time <-
-    as.POSIXct(paste0(unique.dates[1], ' ', last.time, ' BRT'))
+  if (!any(is.null(c(first.time, last.time)))){
+    first.time <-
+      as.POSIXct(paste0(unique.dates[1], ' ', first.time, ' BRT'))
+    last.time <-
+      as.POSIXct(paste0(unique.dates[1], ' ', last.time, ' BRT'))
 
-  idx <- ( my.df$TradeDateTime >= first.time)&( my.df$TradeDateTime <= last.time)
 
-  my.df <- my.df[idx, ]
+    #browser()
+    idx <- ( my.df$TradeDateTime >= first.time)&( my.df$TradeDateTime <= last.time)
+
+    my.df <- my.df[idx, ]
+  }
+
 
   if (type.output == 'raw') {
     return(my.df)
@@ -264,13 +273,13 @@ ghfd_read_file.trades <- function(out.file,
 #' # no example
 ghfd_read_file.orders <- function(out.file,
                                   my.assets = NULL,
-                                  type.matching,
+                                  type.matching = NULL,
                                   first.time = '10:00:00',
                                   last.time = '17:00:00',
                                   type.output = 'agg',
                                   agg.diff = '15 min') {
 
-
+  if (is.null(type.matching)) type.matching <- 'exact'
 
   # set column meanings (ftp://ftp.bmf.com.br/MarketData/OFER_CPA_LAYOUT_english.txt)
   tab.order.side <- data.frame(x.in = (1:2),
@@ -291,7 +300,7 @@ ghfd_read_file.orders <- function(out.file,
   # import data
   col.names <- c('SessionDate','InstrumentSymbol','OrderSide', 'SequentialOrderNumber', 'SecondaryOrderID','ExecutionType',
                  'PriorityTime', 'PriorityIndicator', 'OrderPrice','TotalQuantity', 'TradedQuantity','OrderDate',
-                 'OrderDatetime','OrderStatus','Member')
+                 'OrderDatetime','OrderStatus','AgressorIndicator','Member')
 
 
   my.col.types <- readr::cols(
@@ -309,6 +318,7 @@ ghfd_read_file.orders <- function(out.file,
     OrderDate = readr::col_skip(),
     OrderDatetime = readr::col_datetime(format = ""),
     OrderStatus = readr::col_character(),
+    AgressorIndicator = readr::col_integer(),
     Member = readr::col_integer()
   )
 
@@ -319,7 +329,7 @@ ghfd_read_file.orders <- function(out.file,
   SessionDate  <- InstrumentSymbol <- OrderSide <- NULL
   SequentialOrderNumber <- SecondaryOrderID <- ExecutionType <- NULL
   PriorityTime <- PriorityIndicator <- OrderPrice <- TotalQuantity <- NULL
-  TradedQuantity <- OrderDate <- OrderDatetime <- OrderStatus <- Member <- NULL
+  TradedQuantity <- OrderDate <- OrderDatetime <- OrderStatus <- AgressorIndicator  <- Member <- NULL
 
   # read data (warning are from last line)
   suppressWarnings(suppressMessages(

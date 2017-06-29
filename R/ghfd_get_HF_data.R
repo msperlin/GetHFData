@@ -17,8 +17,9 @@
 #'        Example: agg.diff = '15 mins', agg.diff = '1 hour'.
 #' @param dl.dir The folder to download the zip files (default = 'ftp files')
 #' @param max.dl.tries Maximum attempts to download the files from ftp
-#' @param clean.files Should the files be removed after reading it? (TRUE or FALSE)
-#' @param only.dl Should the function only download the files? (TRUE or FALSE). This is usefull if you just want the file for later analysis
+#' @param clean.files Logical. Should the files be removed after reading it? (TRUE or FALSE)
+#' @param only.dl Logical. Should the function only download the files? (TRUE or FALSE). This is usefull if you just want the file for later analysis
+#' @param do.check.maturities Logical. Should the function check and delete any options with found time to maturity higher than 90 days? (default = TRUE). The bovespa data is not perfect and, sometimes, a tiny number of trades in expired options is somehow recorded.
 #'
 #' @return A dataframe with the financial data in the raw format (tick by tick) or aggregated
 #' @export
@@ -39,14 +40,15 @@ ghfd_get_HF_data <- function(my.assets = NULL,
                              type.data = 'trades',
                              first.date = '2016-01-01',
                              last.date = '2016-01-05',
-                             first.time = '10:00:00',
-                             last.time = '17:00:00',
+                             first.time = NULL,
+                             last.time = NULL,
                              type.output = 'agg',
                              agg.diff = '15 min',
                              dl.dir = 'ftp files',
                              max.dl.tries = 10,
                              clean.files = FALSE,
-                             only.dl = FALSE) {
+                             only.dl = FALSE,
+                             do.check.maturities = TRUE) {
   # check for internet
 
   test.internet <- curl::has_internet()
@@ -128,14 +130,18 @@ ghfd_get_HF_data <- function(my.assets = NULL,
 
   # check first/last time input
 
-  test.date <- as.POSIXct(paste0('2016-01-01', first.time, ' BRT'), format = '%Y-%m-%d %H:%M:%S')
-  if (is.na(test.date)){
-    stop(paste0('ERROR: Cant convert objet start.time (',first.time,') to a POSIXct time class.' ))
+  if (!is.null(first.time)){
+    test.date <- as.POSIXct(paste0('2016-01-01', first.time, ' BRT'), format = '%Y-%m-%d %H:%M:%S')
+    if (is.na(test.date)){
+      stop(paste0('ERROR: Cant convert objet start.time (',first.time,') to a POSIXct time class.' ))
+    }
   }
 
-  test.date <- as.POSIXct(paste0('2016-01-01', last.time, ' BRT'), format = '%Y-%m-%d %H:%M:%S')
-  if (is.na(test.date)){
-    stop(paste0('ERROR: Cant convert objet last.time (', last.time ,') to a POSIXct time class.' ))
+  if (!is.null(last.time)){
+    test.date <- as.POSIXct(paste0('2016-01-01', last.time, ' BRT'), format = '%Y-%m-%d %H:%M:%S')
+    if (is.na(test.date)){
+      stop(paste0('ERROR: Cant convert objet last.time (', last.time ,') to a POSIXct time class.' ))
+    }
   }
 
   # check agg.diff input
@@ -276,6 +282,41 @@ ghfd_get_HF_data <- function(my.assets = NULL,
     df.out <- df.out[idx, ]
 
   }
+
+  # get information on tickers from options
+  if (type.market == 'options') {
+    unique.symbols <- unique(df.out$InstrumentSymbol)
+    unique.dates <- unique(df.out$SessionDate)
+
+    my.grid <- expand.grid(unique.symbols = unique.symbols,
+                           unique.dates = unique.dates, stringsAsFactors = FALSE)
+
+    ref.tab <- mapply(FUN = get.info.opt, my.grid$unique.symbols, my.grid$unique.dates, SIMPLIFY = T )
+
+    my.grid$type.option <- unlist(ref.tab[1,])
+    my.grid$strike.price <- unlist(ref.tab[2,])
+    my.grid$maturity.date <- unlist(ref.tab[3,])
+
+
+    my.grid$str <- paste0(my.grid$unique.symbols, '--', my.grid$unique.dates)
+
+    idx <- match(paste0(df.out$InstrumentSymbol, '--', df.out$SessionDate), my.grid$str)
+
+    df.out$type.option <- as.factor(my.grid$type.option[idx])
+    df.out$strike.price <- as.numeric(my.grid$strike.price[idx])
+    df.out$maturity.date <- as.Date(my.grid$maturity.date[idx])
+
+    # sanity check (check any option with more than 90 days to go)
+    if (do.check.maturities){
+
+      idx <- (df.out$maturity.date - df.out$SessionDate) > 90
+      df.out <- df.out[!idx, ]
+
+    }
+
+
+  }
+
 
   return(df.out)
 }
