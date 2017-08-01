@@ -57,6 +57,30 @@ get.info.opt <- function(ticker.in, session.date) {
 }
 
 
+#' Title
+#'
+#' @param ticker.in
+#'
+#' @return
+#' @export
+#'
+#' @examples
+find.type.opt <- function(ticker.in) {
+  df.exp <- data.frame(month = c(1:12,1:12),
+                       str = c(LETTERS[1:12],
+                               LETTERS[13:24]),
+                       type.opt = c(rep('CALL',12), rep('PUT', 12)))
+
+
+  # get expirations month
+  expiration.symbol <- stringr::str_sub(ticker.in, 5,5)
+  # get type option
+  type.option <- as.character(df.exp$type.opt[match(expiration.symbol,df.exp$str)])
+  return(type.option)
+
+}
+
+
 #' Find the N weekday of a month/year
 #'
 #' @param my.month The month, as numeric (e.g. 02)
