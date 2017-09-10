@@ -124,3 +124,33 @@ GetNWeekDayOfMonth <- function(my.month, my.year, my.weekday="Monday", my.pos = 
 
   return(date.out)
 }
+
+
+GetInfoOptions <- function(df.out, options.ref.table, do.check.maturities) {
+
+unique.symbols <- unique(df.out$InstrumentSymbol)
+unique.dates <- unique(df.out$SessionDate)
+
+options.ref.table
+
+ref1 <- paste(df.out$SessionDate, df.out$InstrumentSymbol)
+ref2 <- paste(options.ref.table$ref.date, options.ref.table$asset.code)
+
+idx <- match(ref1, ref2)
+
+df.out$type.option <- find.type.opt(df.out$InstrumentSymbol)
+df.out$strike.price <- options.ref.table$strike.price[idx]
+df.out$maturity.date <- options.ref.table$expiration.date[idx]
+
+
+
+# sanity check (check any option with more than 90 days to go)
+if (do.check.maturities){
+
+  idx <- (df.out$maturity.date - df.out$SessionDate) > 90
+  df.out <- df.out[!idx, ]
+
+}
+
+
+}

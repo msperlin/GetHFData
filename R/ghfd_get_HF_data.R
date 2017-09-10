@@ -284,54 +284,5 @@ ghfd_get_HF_data <- function(my.assets = NULL,
 
   }
 
-  # get information on tickers from options
-  if ( (type.market == 'options')&(!is.na(options.ref.table)) ) {
-    unique.symbols <- unique(df.out$InstrumentSymbol)
-    unique.dates <- unique(df.out$SessionDate)
-
-    options.ref.table
-
-    ref1 <- paste(df.out$SessionDate, df.out$InstrumentSymbol)
-    ref2 <- paste(options.ref.table$ref.date, options.ref.table$asset.code)
-
-    idx <- match(ref1, ref2)
-
-    df.out$type.option <- find.type.opt(df.out$InstrumentSymbol)
-    df.out$strike.price <- options.ref.table$strike.price[idx]
-    df.out$maturity.date <- options.ref.table$expiration.date[idx]
-
-
-    #browser()
-
-    # my.grid <- expand.grid(unique.symbols = unique.symbols,
-    #                        unique.dates = unique.dates, stringsAsFactors = FALSE)
-    #
-    # ref.tab <- mapply(FUN = get.info.opt, my.grid$unique.symbols, my.grid$unique.dates, SIMPLIFY = T )
-    #
-    # my.grid$type.option <- unlist(ref.tab[1,])
-    # my.grid$strike.price <- unlist(ref.tab[2,])
-    # my.grid$maturity.date <- unlist(ref.tab[3,])
-    #
-    #
-    # my.grid$str <- paste0(my.grid$unique.symbols, '--', my.grid$unique.dates)
-    #
-    # idx <- match(paste0(df.out$InstrumentSymbol, '--', df.out$SessionDate), my.grid$str)
-    #
-    # df.out$type.option <- as.factor(my.grid$type.option[idx])
-    # df.out$strike.price <- as.numeric(my.grid$strike.price[idx])
-    # df.out$maturity.date <- as.Date(my.grid$maturity.date[idx])
-
-    # sanity check (check any option with more than 90 days to go)
-    if (do.check.maturities){
-
-      idx <- (df.out$maturity.date - df.out$SessionDate) > 90
-      df.out <- df.out[!idx, ]
-
-    }
-
-
-  }
-
-
   return(df.out)
 }

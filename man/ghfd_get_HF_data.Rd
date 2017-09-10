@@ -8,7 +8,8 @@ ghfd_get_HF_data(my.assets = NULL, type.matching = "exact",
   type.market = "equity", type.data = "trades", first.date = "2016-01-01",
   last.date = "2016-01-05", first.time = NULL, last.time = NULL,
   type.output = "agg", agg.diff = "15 min", dl.dir = "ftp files",
-  max.dl.tries = 10, clean.files = FALSE, only.dl = FALSE)
+  max.dl.tries = 10, clean.files = FALSE, only.dl = FALSE,
+  options.ref.table = NA, do.check.maturities = TRUE)
 }
 \arguments{
 \item{my.assets}{The tickers (symbols) of the derised assets to import data (e.g. c('PETR4', 'VALE5')). The function allow for partial patching (e.g. 'PETR' for all assets related to Petrobras). Default is set to NULL (download all available tickers)}
@@ -37,9 +38,11 @@ Example: agg.diff = '15 mins', agg.diff = '1 hour'.}
 
 \item{max.dl.tries}{Maximum attempts to download the files from ftp}
 
-\item{clean.files}{Should the files be removed after reading it? (TRUE or FALSE)}
+\item{clean.files}{Logical. Should the files be removed after reading it? (TRUE or FALSE)}
 
-\item{only.dl}{Should the function only download the files? (TRUE or FALSE). This is usefull if you just want the file for later analysis}
+\item{only.dl}{Logical. Should the function only download the files? (TRUE or FALSE). This is usefull if you just want the file for later analysis}
+
+\item{do.check.maturities}{Logical. Should the function check and delete any options with found time to maturity higher than 90 days? (default = TRUE). The bovespa data is not perfect and, sometimes, a tiny number of trades in expired options is somehow recorded.}
 }
 \value{
 A dataframe with the financial data in the raw format (tick by tick) or aggregated
