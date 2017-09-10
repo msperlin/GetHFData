@@ -2,7 +2,8 @@
 
 Major update:
 
-* Users can now recreate the LOB (limit order book)
+* Users can now recreate the LOB (limit order book) using order data from Bovespa
+* fixed bug for only.dl = TRUE
 
 ### Version 1.3 (2017-05-29)
 
@@ -10,7 +11,7 @@ Major update:
 
 * Users can now download and aggregate order files (input type.data)
 * Fixed link to paper
-* Now it is possible to use partial matching (e.g. use PETR for all stocks or options related to Petrobras)
+* Partial matching for assets is now possible (e.g. use PETR for all stocks or options related to Petrobras)
 * implement option for only downloading files (this is helpful if you are dealing with order data and will process the files in other R session or software)
 * muted message "Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control." 
 

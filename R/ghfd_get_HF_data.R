@@ -264,7 +264,7 @@ ghfd_get_HF_data <- function(my.assets = NULL,
   }
 
 
-  if (nrow(df.out) == 0) {
+  if ( (nrow(df.out) == 0)&(only.dl = FALSE) ) {
     stop(
       paste(
         'Warning: No data found in files for assets',
@@ -275,7 +275,7 @@ ghfd_get_HF_data <- function(my.assets = NULL,
   }
 
   # sort data.frame (if raw data)
-  if ( (type.data =='orders')&(type.output == 'raw') ) {
+  if ( (type.data =='orders')&(type.output == 'raw')&(only.dl = FALSE) ) {
     idx <- order(df.out$InstrumentSymbol, df.out$OrderDatetime)
     df.out <- df.out[idx, ]
 
