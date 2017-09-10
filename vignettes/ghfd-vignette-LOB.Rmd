@@ -1,0 +1,47 @@
+---
+title: "Recreating the LOB (limit order book)"
+author: "Marcelo Perlin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Downloading and aggregating order data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Version 1.4 of `GetHFData` adds functions for recreating the LOB (limit order book) from the order data. The LOB is recreated by sorting all trading orders (buy and sell) and matching them whenever there is a match of prices. 
+
+Simulating the LOB is a recursive and computer intensive problem. The current code is not optimized for speed and it may take a long time to process even a small set of financial orders.
+
+Here's an example of usage:
+
+```{r notrun, eval=FALSE}
+library(GetHFData)
+
+first.time <- '10:00:00'
+last.time <- '17:00:00'
+
+first.date <- '2015-08-18' 
+last.date <- '2015-08-18'
+
+type.output <- 'raw' # aggregates data 
+
+my.assets <- 'PETR4F' # all options related to Petrobras (partial matching)
+type.matching <- 'partial' # finds tickers from my.assets using partial matching
+type.market = 'equity-odds' # option market
+type.data <- 'orders' # order data
+
+df.out <- ghfd_get_HF_data(my.assets =my.assets, 
+                           type.data= type.data,
+                           type.matching = type.matching,
+                           type.market = type.market,
+                           first.date = first.date,
+                           last.date = last.date,
+                           first.time = first.time,
+                           last.time = last.time,
+                           type.output = type.output)
+                           
+df.lob <- ghfd_build_lob(df.out)
+
+
+```

@@ -19,7 +19,6 @@
 #' @param max.dl.tries Maximum attempts to download the files from ftp
 #' @param clean.files Logical. Should the files be removed after reading it? (TRUE or FALSE)
 #' @param only.dl Logical. Should the function only download the files? (TRUE or FALSE). This is usefull if you just want the file for later analysis
-#' @param do.check.maturities Logical. Should the function check and delete any options with found time to maturity higher than 90 days? (default = TRUE). The bovespa data is not perfect and, sometimes, a tiny number of trades in expired options is somehow recorded.
 #'
 #' @return A dataframe with the financial data in the raw format (tick by tick) or aggregated
 #' @export
@@ -47,9 +46,7 @@ ghfd_get_HF_data <- function(my.assets = NULL,
                              dl.dir = 'ftp files',
                              max.dl.tries = 10,
                              clean.files = FALSE,
-                             only.dl = FALSE,
-                             options.ref.table = NA,
-                             do.check.maturities = TRUE) {
+                             only.dl = FALSE) {
   # check for internet
 
   test.internet <- curl::has_internet()

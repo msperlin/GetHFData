@@ -1,3 +1,33 @@
+#' Building LOB (limit order book) from orders
+#'
+#' @param df.orders A dataframe, output from ghfd_GetHFData
+#' @param silent Should the function print progress ? (TRUE (default) or FALSE)  
+#'
+#' @return A dataframe with information about LOB
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(GetHFData)
+#' first.time <- '11:00:00'
+#' last.time <- '17:00:00'
+#' first.date <- as.Date('2015-11-03')
+#' last.date <- as.Date('2015-11-03')
+#' type.output <- 'raw'
+#' type.data <- 'orders'
+#' type.market = 'equity-odds'
+#' 
+#' df.out <- ghfd_get_HF_data(my.assets =my.assets,
+#'                           type.market = type.market,
+#'                           type.data = type.data,
+#'                           first.date = first.date,
+#'                           last.date = last.date,
+#'                           first.time = first.time,
+#'                           last.time = last.time,
+#'                           type.output = type.output)
+#'                           
+#' df.lob <- ghfd_build_lob(df.out)
+#' }
 ghfd_build_lob <- function(df.orders, silent = TRUE) {
     
   # check inputs
