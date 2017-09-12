@@ -48,7 +48,6 @@ ghfd_get_HF_data <- function(my.assets = NULL,
                              clean.files = FALSE,
                              only.dl = FALSE) {
   # check for internet
-
   test.internet <- curl::has_internet()
 
   if (!test.internet) {
@@ -88,6 +87,10 @@ ghfd_get_HF_data <- function(my.assets = NULL,
       ),
       collapse = ', '
     ))
+  }
+
+  if (any(is.null(c(first.time, last.time)))&(type.output == 'agg')) {
+    stop('When using type.output="agg", you must set inputs first.time and last.time. Example: first.time = "11:00:00" and last.time = "17:00:00"')
   }
   # check type.market
   possible.names <- c('equity', 'equity-odds','options', 'BMF')
