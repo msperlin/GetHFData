@@ -4,7 +4,7 @@ author: "Marcelo Perlin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Downloading and aggregating order data}
+  %\VignetteIndexEntry{Recreating the LOB (limit order book)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
