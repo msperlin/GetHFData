@@ -1,3 +1,9 @@
+### Version 1.5 (2017-11-27)
+
+Minor update:
+
+* Added support for milsecond in LOB
+
 ### Version 1.4 (2017-09-10)
 
 Major update:

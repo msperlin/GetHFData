@@ -242,8 +242,8 @@ process.lob.from.df <- function(asset.df, silent = T) {
                  ask.id = asset.df$SequentialOrderNumber[idx.ask],
                  bid.vol = asset.df$TotalQuantity[idx.bid],
                  ask.vol = asset.df$TotalQuantity[idx.ask],
-                 bid.time = asset.df$OrderDatetime[idx.bid],
-                 ask.time = asset.df$OrderDatetime[idx.ask],
+                 bid.time = asset.df$PriorityDateTime[idx.bid],
+                 ask.time = asset.df$PriorityDateTime[idx.ask],
                  last.update = NA)
 
 
@@ -272,7 +272,7 @@ process.lob.from.df <- function(asset.df, silent = T) {
     order.in$side = i.df$OrderSide[1]
     order.in$type.order = i.df$ExecutionType[1]
     order.in$id = i.df$SequentialOrderNumber[1]
-    order.in$time = i.df$OrderDatetime
+    order.in$time = i.df$PriorityDateTime
 
     #print(as.character(order.in$type.order))
 

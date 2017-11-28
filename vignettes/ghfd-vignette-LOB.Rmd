@@ -21,8 +21,8 @@ library(GetHFData)
 first.time <- '10:00:00'
 last.time <- '17:00:00'
 
-first.date <- '2015-08-18' 
-last.date <- '2015-08-18'
+first.date <- '2016-08-18' 
+last.date <- '2016-08-18'
 
 type.output <- 'raw' # aggregates data 
 

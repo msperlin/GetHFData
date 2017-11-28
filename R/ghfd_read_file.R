@@ -387,6 +387,7 @@ ghfd_read_file.orders <- function(out.file,
   }
 
   # Set objet classes correct
+  options(digits.secs=3) # get correct milseconds
   my.df$OrderPrice <- as.numeric(my.df$OrderPrice)
   my.df$PriorityDateTime <- lubridate::ymd_hms(paste(my.df$SessionDate,my.df$PriorityTime),
                                             tz = "America/Sao_Paulo")
