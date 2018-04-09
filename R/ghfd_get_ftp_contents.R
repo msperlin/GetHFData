@@ -98,7 +98,7 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
 
     # check if html.code and size makes sense. If not, download it again
 
-    if ( is.null(files.at.ftp)|(length(files.at.ftp)<400) ){
+    if ( is.null(files.at.ftp)|(length(files.at.ftp)<200) ){
       cat(' - Error in reading ftp contents. Trying again..')
     } else {
       break()
@@ -110,7 +110,7 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
 
     i.try <- i.try + 1
 
-    Sys.sleep(1)
+    Sys.sleep(2)
   }
 
   # find dates from file names
