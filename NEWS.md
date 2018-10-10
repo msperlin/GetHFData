@@ -1,3 +1,9 @@
+### Version 1.5.1 (2018-10-10)
+
+Minor update:
+
+* Fixed bug in ghfd_get_ftp_contents for 'equity' option
+
 ### Version 1.5 (2017-11-27)
 
 Minor update:

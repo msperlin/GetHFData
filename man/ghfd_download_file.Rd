@@ -4,7 +4,8 @@
 \alias{ghfd_download_file}
 \title{Downloads a single file from Bovespa ftp}
 \usage{
-ghfd_download_file(my.ftp, out.file, dl.dir = "Dl Files", max.dl.tries = 10)
+ghfd_download_file(my.ftp, out.file, dl.dir = "Dl Files",
+  max.dl.tries = 10)
 }
 \arguments{
 \item{my.ftp}{A complete, including file name, ftp address to download the file from}
