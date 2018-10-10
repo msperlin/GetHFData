@@ -1,4 +1,4 @@
-### Version 1.5.1 (2018-10-10)
+### Version 1.6 (2018-10-10)
 
 Minor update:
 

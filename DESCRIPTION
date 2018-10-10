@@ -1,6 +1,6 @@
 Package: GetHFData
 Title: Download and Aggregate High Frequency Trading Data from Bovespa
-Version: 1.5.1
+Version: 1.6
 Date: 2018-10-10
 Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre")),
              person("Henrique", "Ramos", email = "hpramos4@gmail.com", role = c("ctb")) )
