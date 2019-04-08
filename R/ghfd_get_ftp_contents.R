@@ -63,9 +63,15 @@ ghfd_get_ftp_contents <- function(type.market = 'equity',
 
     if (type.data == 'trades') {
       # filter ftp files for trades
+      # pattern.files <- 'NEG_(.*).zip'
+
+      # Fix for issue 5: https://github.com/msperlin/GetHFData/issues/5
+
       pattern.files <- 'NEG_(.*)'
     }
     else if (type.data == 'orders') {
+      # pattern.files <- 'OFER_(.*).zip'
+      # Fix for issue 5: https://github.com/msperlin/GetHFData/issues/5
       pattern.files <- 'OFER_(.*)'
     }
 

@@ -1,0 +1,8 @@
+pandoc: 1.19.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  ghfd-vignette-LOB: ghfd-vignette-LOB.html
+  ghfd-vignette-Orders: ghfd-vignette-Orders.html
+  ghfd-vignette-Trades: ghfd-vignette-Trades.html
+
