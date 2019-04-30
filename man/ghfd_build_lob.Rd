@@ -36,7 +36,7 @@ df.out <- ghfd_get_HF_data(my.assets =my.assets,
                           first.time = first.time,
                           last.time = last.time,
                           type.output = type.output)
-                          
+
 df.lob <- ghfd_build_lob(df.out)
 }
 }

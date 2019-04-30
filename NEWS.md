@@ -1,3 +1,10 @@
+## Version 1.7.1 (2019-04-30)
+
+Minor update:
+
+* Fixed bug regarding silent argument at build_lob (see [issue 7](https://github.com/msperlin/GetHFData/issues/7))
+
+
 ## Version 1.7 (2019-04-08)
 
 Minor update:

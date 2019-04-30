@@ -4,7 +4,7 @@
 \alias{process.lob.from.df}
 \title{Process LOB from asset dataframe}
 \usage{
-process.lob.from.df(asset.df, silent = T)
+process.lob.from.df(asset.df, silent = TRUE)
 }
 \arguments{
 \item{asset.df}{A dataframe with orders for a single asset}

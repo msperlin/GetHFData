@@ -72,7 +72,6 @@ organize.lob <- function(my.lob, silent = TRUE) {
 
     }
 
-    #browser()
     my.lob <- organize.lob(my.lob)
   }
 
@@ -221,7 +220,7 @@ print.lob <- function(my.lob, max.level = 3) {
 #'
 #' @examples
 #' # no example (internal)
-process.lob.from.df <- function(asset.df, silent = T) {
+process.lob.from.df <- function(asset.df, silent = TRUE) {
 
   # sort df by priority time
   asset.df <- asset.df[order(asset.df$PriorityDateTime), ]
@@ -246,8 +245,6 @@ process.lob.from.df <- function(asset.df, silent = T) {
                  ask.time = asset.df$PriorityDateTime[idx.ask],
                  last.update = NA)
 
-
-  #browser()
   delta.sec <- 5 # in sec
   lob.info <- data.frame()
   my.l <- list()
@@ -264,7 +261,7 @@ process.lob.from.df <- function(asset.df, silent = T) {
 
     #if (i.row ==6) browser()
     #browser()
-    if (i.row == 1) my.lob <- organize.lob(my.lob)
+    if (i.row == 1) my.lob <- organize.lob(my.lob, silent)
 
     order.in <- list()
     order.in$price = i.df$OrderPrice
@@ -276,7 +273,7 @@ process.lob.from.df <- function(asset.df, silent = T) {
 
     #print(as.character(order.in$type.order))
 
-    my.lob <- add.order(my.lob, order.in)
+    my.lob <- add.order(my.lob, order.in, silent = silent)
 
     df.lob <- data.frame(InstrumentSymbol = my.asset,
                          best.ask  = my.lob$ask.price[1],
