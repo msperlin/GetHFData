@@ -7,14 +7,15 @@ Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role
 Description: Downloads and aggregates high frequency trading data for Brazilian instruments directly from Bovespa ftp site <ftp://ftp.bmf.com.br/MarketData/>.
 Depends:
     R (>= 3.3.0)
-Imports: stringr,stats,RCurl, lubridate, readr, utils, curl,dplyr
+Imports: stringr,stats,RCurl, lubridate, readr, utils, curl,dplyr, archive
 License: GPL-2
 BugReports: https://github.com/msperlin/GetHFData/issues
 URL: https://github.com/msperlin/GetHFData/
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Suggests: knitr,
     rmarkdown,
     testthat,
     ggplot2
 VignetteBuilder: knitr
+remotes: git::https://github.com/jimhester/archive.git

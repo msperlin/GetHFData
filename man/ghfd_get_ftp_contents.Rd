@@ -4,8 +4,11 @@
 \alias{ghfd_get_ftp_contents}
 \title{Gets the contents of Bovespa ftp}
 \usage{
-ghfd_get_ftp_contents(type.market = "equity", max.dl.tries = 10,
-  type.data = "trades")
+ghfd_get_ftp_contents(
+  type.market = "equity",
+  max.dl.tries = 10,
+  type.data = "trades"
+)
 }
 \arguments{
 \item{type.market}{The type of market to download data from ('equity', 'equity-odds','options', 'BMF' ).}

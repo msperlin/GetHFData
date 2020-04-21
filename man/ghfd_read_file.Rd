@@ -4,9 +4,16 @@
 \alias{ghfd_read_file}
 \title{Reads zip file downloaded from Bovespa ftp (trades or orders)}
 \usage{
-ghfd_read_file(out.file, my.assets = NULL, type.matching = "exact",
-  type.data = "trades", first.time = "10:00:00",
-  last.time = "17:00:00", type.output = "agg", agg.diff = "15 min")
+ghfd_read_file(
+  out.file,
+  my.assets = NULL,
+  type.matching = "exact",
+  type.data = "trades",
+  first.time = "10:00:00",
+  last.time = "17:00:00",
+  type.output = "agg",
+  agg.diff = "15 min"
+)
 }
 \arguments{
 \item{out.file}{Name of zip file}

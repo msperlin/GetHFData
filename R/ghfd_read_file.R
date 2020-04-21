@@ -34,6 +34,7 @@ ghfd_read_file <- function(out.file,
     }
   }
 
+  # unpack files
   if (type.data == 'trades') {
     t.out <- ghfd_read_file.trades(out.file,
                                    my.assets = my.assets,
@@ -83,6 +84,13 @@ ghfd_read_file.trades <- function(out.file,
 
   if (is.null(type.matching)) type.matching <- 'exact'
 
+  # decompress file
+  unzip_folder <- file.path(tempdir(), 'gethfdata_files')
+  if (!dir.exists(unzip_folder)) dir.create(unzip_folder)
+
+  df_files <- archive::archive_extract(out.file, dir = unzip_folder)
+  txt_file <- file.path(unzip_folder, df_files$path[1])
+
     # import data
   col.names <- c('SessionDate','InstrumentSymbol','TradeNumber', 'TradePrice', 'TradedQuantity','Tradetime',
                  'TradeIndicator', 'BuyOrderDate', 'SequentialBuyOrderNumber','SecondaryOrderID',
@@ -120,18 +128,19 @@ ghfd_read_file.trades <- function(out.file,
 
   # read data (warning are from last line)
   suppressWarnings(suppressMessages(
-    my.df <- readr::read_csv2(file = out.file,
+    my.df <- readr::read_csv2(file = txt_file,
                               skip = 1,
                               col_names = col.names,
                               progress = F,
-                              col_types = my.col.types)
+                              col_types = my.col.types,
+                              locale = readr::locale(encoding = 'Latin1'))
   ) )
 
   if(nrow(my.df)<10){
     return(data.frame())
   }
 
-  # remove cancelled trades
+  # remove canceled trades
   my.df <- dplyr::filter(my.df,
                          TradeIndicator == 1)
 
@@ -281,6 +290,13 @@ ghfd_read_file.orders <- function(out.file,
 
   if (is.null(type.matching)) type.matching <- 'exact'
 
+  # decompress file
+  unzip_folder <- file.path(tempdir(), 'gethfdata_files')
+  if (!dir.exists(unzip_folder)) dir.create(unzip_folder)
+
+  df_files <- archive::archive_extract(out.file, dir = unzip_folder)
+  txt_file <- file.path(unzip_folder, df_files$path[1])
+
   # set column meanings (ftp://ftp.bmf.com.br/MarketData/OFER_CPA_LAYOUT_english.txt)
   tab.order.side <- data.frame(x.in = (1:2),
                                x.out = c('Buy','Sell'))
@@ -333,7 +349,7 @@ ghfd_read_file.orders <- function(out.file,
 
   # read data (warning are from last line)
   suppressWarnings(suppressMessages(
-    my.df <- readr::read_csv2(file = out.file,
+    my.df <- readr::read_csv2(file = txt_file,
                               skip = 1,
                               col_names = col.names,
                               progress = F,

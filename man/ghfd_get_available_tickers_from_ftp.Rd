@@ -4,9 +4,13 @@
 \alias{ghfd_get_available_tickers_from_ftp}
 \title{Function to get available tickers from ftp}
 \usage{
-ghfd_get_available_tickers_from_ftp(my.date = "2015-11-03",
-  type.market = "equity", type.data = "trades", dl.dir = "ftp files",
-  max.dl.tries = 10)
+ghfd_get_available_tickers_from_ftp(
+  my.date = "2015-11-03",
+  type.market = "equity",
+  type.data = "trades",
+  dl.dir = "ftp files",
+  max.dl.tries = 10
+)
 }
 \arguments{
 \item{my.date}{A single date to check tickers in ftp (e.g. '2015-11-03')}
