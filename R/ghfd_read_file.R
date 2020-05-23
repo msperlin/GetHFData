@@ -85,11 +85,7 @@ ghfd_read_file.trades <- function(out.file,
   if (is.null(type.matching)) type.matching <- 'exact'
 
   # decompress file
-  unzip_folder <- file.path(tempdir(), 'gethfdata_files')
-  if (!dir.exists(unzip_folder)) dir.create(unzip_folder)
-
-  df_files <- archive::archive_extract(out.file, dir = unzip_folder)
-  txt_file <- file.path(unzip_folder, df_files$path[1])
+  txt_file <- ghfd_uncompress_file(out.file)
 
     # import data
   col.names <- c('SessionDate','InstrumentSymbol','TradeNumber', 'TradePrice', 'TradedQuantity','Tradetime',
@@ -291,11 +287,7 @@ ghfd_read_file.orders <- function(out.file,
   if (is.null(type.matching)) type.matching <- 'exact'
 
   # decompress file
-  unzip_folder <- file.path(tempdir(), 'gethfdata_files')
-  if (!dir.exists(unzip_folder)) dir.create(unzip_folder)
-
-  df_files <- archive::archive_extract(out.file, dir = unzip_folder)
-  txt_file <- file.path(unzip_folder, df_files$path[1])
+  txt_file <- ghfd_uncompress_file(out.file)
 
   # set column meanings (ftp://ftp.bmf.com.br/MarketData/OFER_CPA_LAYOUT_english.txt)
   tab.order.side <- data.frame(x.in = (1:2),
@@ -468,4 +460,34 @@ ghfd_read_file.orders <- function(out.file,
 
   }
 
+}
+
+ghfd_uncompress_file <- function(file_in) {
+
+  unzip_folder <- file.path(tempdir(), 'gethfdata_files')
+  if (!dir.exists(unzip_folder)) dir.create(unzip_folder, recursive = TRUE)
+
+  file_ext <- tools::file_ext(file_in)
+  if ( file_ext == '7z') {
+
+    df_files <- archive::archive_extract(file_in, dir = unzip_folder)
+    txt_file <- file.path(unzip_folder, df_files$path[1])
+
+  } else if (file_ext == 'gz') {
+
+    txt_file <- file.path(unzip_folder,
+                          paste0(tools::file_path_sans_ext(file_in),
+                                 '.txt') )
+
+    R.utils::gunzip(file_in,
+                    destname = txt_file)
+
+  } else if (file_ext == 'zip') {
+    txt_file <- zipfile # just pass the file (readr can handle it)
+  }
+  else  {
+    stop('B3 File extension unrecognized. It should be either 7z, gz or zip (yes, I know, these guys can be very creative..')
+  }
+
+  return(txt_file)
 }

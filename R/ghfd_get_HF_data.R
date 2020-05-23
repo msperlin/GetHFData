@@ -189,7 +189,6 @@ ghfd_get_HF_data <- function(my.assets = NULL,
     my.assets.str <- my.assets
   }
 
-  #browser()
   cat('\nRunning ghfd_get_HF_Data for:')
   cat('\n   type.market =', type.market)
   cat('\n   type.data =', type.data)
