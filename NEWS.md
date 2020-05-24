@@ -1,3 +1,9 @@
+## Version 1.7.2 (2020-05-25)
+
+Minor update:
+
+* Fixed issue with 0 rows dataframes (filter badly placed for cancelled trades)
+
 ## Version 1.7.1 (2019-04-30)
 
 Minor update:

@@ -136,9 +136,9 @@ ghfd_read_file.trades <- function(out.file,
     return(data.frame())
   }
 
-  # remove canceled trades
-  my.df <- dplyr::filter(my.df,
-                         TradeIndicator == 1)
+  # remove canceled trades (2020-05-24 REMOVED THIS FILTER FOR OLD FILES)
+  #my.df <- dplyr::filter(my.df,
+   #                      TradeIndicator == 1)
 
 
   cat(paste(' - Imported ', nrow(my.df), 'lines,',length(unique(my.df$InstrumentSymbol)),'unique tickers'))
@@ -483,10 +483,13 @@ ghfd_uncompress_file <- function(file_in) {
                     destname = txt_file)
 
   } else if (file_ext == 'zip') {
-    txt_file <- zipfile # just pass the file (readr can handle it)
+    txt_file <- file_in # just pass the file (readr can handle it)
   }
   else  {
-    stop('B3 File extension unrecognized. It should be either 7z, gz or zip (yes, I know, these guys can be very creative..')
+    stop(paste0(
+      'B3 File extension', file_ext,
+      ' unrecognized. It should be either 7z, gz or zip (yes, I know, these guys can be very creative..'
+      ) )
   }
 
   return(txt_file)

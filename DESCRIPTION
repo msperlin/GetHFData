@@ -1,7 +1,7 @@
 Package: GetHFData
 Title: Download and Aggregate High Frequency Trading Data from Bovespa
-Version: 1.7.1
-Date: 2019-04-30
+Version: 1.7.2
+Date: 2020-05-24
 Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre")),
              person("Henrique", "Ramos", email = "hpramos4@gmail.com", role = c("ctb")) )
 Description: Downloads and aggregates high frequency trading data for Brazilian instruments directly from Bovespa ftp site <ftp://ftp.bmf.com.br/MarketData/>.
@@ -16,6 +16,7 @@ RoxygenNote: 7.1.0
 Suggests: knitr,
     rmarkdown,
     testthat,
-    ggplot2
+    ggplot2,
+    R.utils
 VignetteBuilder: knitr
 remotes: git::https://github.com/jimhester/archive.git
