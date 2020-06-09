@@ -1,5 +1,11 @@
 ## Download and Aggregate High Frequency Trading Data from Bovespa
 
+**ATTENTION: The CRAN version of this package is NOT working. Please use the github version: **
+
+```
+devtools::install_github('msperlin/GetHFData')
+```  
+
 Recently, Bovespa, the Brazilian financial exchange company, allowed external access to its [ftp site](ftp://ftp.bmf.com.br/). In this address one can find several information regarding the Brazilian financial system, including datasets with high frequency (tick by tick) trading data for three different markets: equity, options and BMF. 
 
 Downloading and processing these files, however, can be exausting. The dataset is composed of zip files with the whole trading data, separated by day and market. These files are huge in size and processing or aggregating them in a usefull manner requires specific knowledge for the structure of the dataset. 
