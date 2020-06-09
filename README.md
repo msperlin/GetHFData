@@ -1,6 +1,6 @@
 ## Download and Aggregate High Frequency Trading Data from Bovespa
 
-**ATTENTION: The CRAN version of this package is NOT working. Please use the github version: **
+**IMPORTANT: The CRAN version of this package is NOT working. Please use the github version:**
 
 ```
 devtools::install_github('msperlin/GetHFData')
