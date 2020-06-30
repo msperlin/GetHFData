@@ -1,6 +1,7 @@
 ## Download and Aggregate High Frequency Trading Data from Bovespa
 
-**IMPORTANT: The CRAN version of this package is NOT working. Please use the github version:**
+**IMPORTANT: 2020-06-30 B3 closed the public access to the ftp and, therefore, the package is not working. As far as I know, there is no expectation of any change in that status in the near future. I'm also not aware of any other source of HF data.**
+
 
 ```
 devtools::install_github('msperlin/GetHFData')
