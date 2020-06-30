@@ -2,13 +2,9 @@
 
 ---
 
-**2020-06-30 IMPORTANT: B3 closed the public access to the ftp and, therefore, the package is not working. As far as I know, there is no expectation of any change in that status in the near future. I'm also not aware of any other source of HF data.**
+**2020-06-30 IMPORTANT: B3 closed the public access to the ftp site and, therefore, the package is not working. As far as I know, there is no expectation of any change in that status in the near future. I'm also not aware of any other source of HF data. **
 
 ---
-
-```
-devtools::install_github('msperlin/GetHFData')
-```  
 
 Recently, Bovespa, the Brazilian financial exchange company, allowed external access to its [ftp site](ftp://ftp.bmf.com.br/). In this address one can find several information regarding the Brazilian financial system, including datasets with high frequency (tick by tick) trading data for three different markets: equity, options and BMF. 
 
