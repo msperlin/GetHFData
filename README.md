@@ -2,7 +2,7 @@
 
 ---
 
-**2020-06-30 IMPORTANT: B3 closed the public access to the ftp site and, therefore, the package is not working. As far as I know, there is no expectation of any change in that status in the near future. I'm also not aware of any other source of HF data. **
+**2020-06-30 IMPORTANT: B3 closed the public access to the ftp site and, therefore, the package is not working. As far as I know, there is no expectation of any change in that status in the near future. I'm also not aware of any other source of HF data.**
 
 ---
 
